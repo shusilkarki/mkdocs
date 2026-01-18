@@ -29,7 +29,7 @@ jobs:
           sshPrivateKey: ${{ secrets.SSH_PRIVATE_KEY }}
           remoteHost: ${{ secrets.REMOTE_HOST }}
           remoteUser: ${{ secrets.REMOTE_USER }}
-          remotePort: ${{ secrets.REMOTE_PORT || 22 }}
+          remotePort: ${{ secrets.REMOTE_PORT }}
           target: ${{ secrets.REMOTE_TARGET }}
           source: "site/"
           args: "-rltgoDzvO --delete"

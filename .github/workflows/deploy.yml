@@ -39,5 +39,3 @@ jobs:
         run: |
           echo "✅ Deployment completed successfully!"
           echo "Site should be live at: http://${{ secrets.REMOTE_HOST }}"
-
-# ssh-keygen -t rsa -b 4096 -C "github-actions" -f ~/.ssh/id_rsa_github_actions -N ""

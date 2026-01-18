@@ -30,15 +30,15 @@ jobs:
       - name: Build site
         run: mkdocs build --clean
 
-      - name: Deploy to Ubuntu Server
-        uses: easingthemes/ssh-deploy@main
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@v4.1.8
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
-          SOURCE: "site/"
+          REMOTE_PORT: ${{ secrets.REMOTE_PORT || 22 }}
           TARGET: ${{ secrets.REMOTE_TARGET }}
+          SOURCE: "site/"
           ARGS: "-rltgoDzvO --delete"
 
       - name: Restart Nginx (if needed)

@@ -27,8 +27,8 @@ jobs:
         uses: easingthemes/ssh-deploy@v4.1.8
         with:
           sshPrivateKey: ${{ secrets.SSH_PRIVATE_KEY }}
-          remoteHost: ${{ secrets.172.17.16.58 }}
-          remoteUser: ${{ secrets.shusil }}
+          remoteHost: ${{ secrets.REMOTE_HOST }}
+          remoteUser: ${{ secrets.REMOTE_USER }}
           remotePort: ${{ secrets.REMOTE_PORT || 22 }}
           target: ${{ secrets.REMOTE_TARGET }}
           source: "site/"

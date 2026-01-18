@@ -2,19 +2,14 @@ name: Deploy MkDocs to Ubuntu Server
 
 on:
   push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
+    branches: [main]
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -23,9 +18,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install mkdocs mkdocs-material
-          # If you have requirements.txt
-          pip install -r requirements.txt
+          pip install mkdocs mkdocs-material mkdocs-minify-plugin
 
       - name: Build site
         run: mkdocs build --clean
@@ -33,20 +26,16 @@ jobs:
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v4.1.8
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          REMOTE_PORT: ${{ secrets.REMOTE_PORT || 22 }}
-          TARGET: ${{ secrets.REMOTE_TARGET }}
-          SOURCE: "site/"
-          ARGS: "-rltgoDzvO --delete"
+          sshPrivateKey: ${{ secrets.SSH_PRIVATE_KEY }}
+          remoteHost: ${{ secrets.REMOTE_HOST }}
+          remoteUser: ${{ secrets.REMOTE_USER }}
+          remotePort: ${{ secrets.REMOTE_PORT || 22 }}
+          target: ${{ secrets.REMOTE_TARGET }}
+          source: "site/"
+          args: "-rltgoDzvO --delete"
+          exclude: ".git*, *.md, mkdocs.yml"
 
-      - name: Restart Nginx (if needed)
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            sudo systemctl reload nginx
-            echo "Deployment completed at $(date)"
+      - name: Verify Deployment
+        run: |
+          echo "✅ Deployment completed successfully!"
+          echo "Site should be live at: http://${{ secrets.REMOTE_HOST }}"

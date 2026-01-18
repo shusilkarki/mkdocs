@@ -19,6 +19,16 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
+            # Install MkDocs and Material theme with ALL extensions
+          pip install mkdocs-material[imaging]
+        
+        # If you're using specific extensions, install them:
+          pip install pillow cairosvg  # For image processing
+          pip install mkdocs-minify-plugin
+          
+          # Optional: If you need PDF export or other features
+          # pip install mkdocs-pdf-export-plugin
+          # pip install mkdocs-mermaid2-plugin
 
       - name: Build site
         run: mkdocs build --clean
